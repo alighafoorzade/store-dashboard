@@ -179,7 +179,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): add list controls`
 
-- [ ] **13. Build responsive order results**
+- [x] **13. Build responsive order results**
   - **Depends on:** Tasks 8 and 10–12.
   - **Work:** Add a semantic desktop/tablet table and mobile cards with loading, empty-dataset, no-results, and recoverable error states.
   - **Acceptance criteria:**

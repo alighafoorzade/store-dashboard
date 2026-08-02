@@ -1,5 +1,6 @@
 import { AppShell } from "@/components/layout/app-shell";
 import { OrderListControls } from "@/features/orders/components/order-list-controls";
+import { OrderResults } from "@/features/orders/components/order-results";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -19,6 +20,9 @@ export default function Home() {
       </header>
       <Suspense fallback={<p className="mt-8">Loading order controls…</p>}>
         <OrderListControls />
+        <div className="mt-8">
+          <OrderResults />
+        </div>
       </Suspense>
     </AppShell>
   );
