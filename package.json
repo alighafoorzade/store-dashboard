@@ -25,7 +25,7 @@
     "check:cycles": "madge --circular --extensions ts,tsx --ts-config tsconfig.json --exclude '^tailwindcss$' src",
     "check:architecture": "depcruise src",
     "security:audit": "npm audit --audit-level=high",
-    "security:sonar": "sonar-scanner",
+    "quality:sonar": "sonar-scanner",
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run check:dead-code && npm run check:cycles && npm run check:architecture && npm run build"
   },
   "dependencies": {

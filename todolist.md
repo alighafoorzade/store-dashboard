@@ -317,7 +317,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run security:audit`
   - **Commit:** `ci(security): add automated security scanning`
 
-- [ ] **23. Add Sonar configuration**
+- [x] **23. Add Sonar configuration**
   - **Depends on:** Tasks 3 and 19.
   - **Work:** Add Sonar scanner properties and an npm script without enabling CI execution or inventing credentials.
   - **Acceptance criteria:**
