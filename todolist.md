@@ -164,7 +164,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run build`
   - **Commit:** `feat(layout): add responsive admin shell`
 
-- [ ] **12. Build order search, filtering, and sorting controls**
+- [x] **12. Build order search, filtering, and sorting controls**
   - **Depends on:** Tasks 9–11.
   - **Work:** Compose accessible URL-backed search, multi-status filters, sorting controls, active-filter feedback, clear action, and loading feedback.
   - **Acceptance criteria:**

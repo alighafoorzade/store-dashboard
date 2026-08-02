@@ -1,4 +1,6 @@
 import { AppShell } from "@/components/layout/app-shell";
+import { OrderListControls } from "@/features/orders/components/order-list-controls";
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -15,6 +17,9 @@ export default function Home() {
           one workspace.
         </p>
       </header>
+      <Suspense fallback={<p className="mt-8">Loading order controls…</p>}>
+        <OrderListControls />
+      </Suspense>
     </AppShell>
   );
 }

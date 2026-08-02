@@ -75,6 +75,7 @@ export function useOrderQueryState() {
 
   return {
     query,
+    isSearchPending: pendingSearch !== null,
     searchInput:
       pendingSearch?.base === query.search ? pendingSearch.value : query.search,
     setSearch: (value: string) =>

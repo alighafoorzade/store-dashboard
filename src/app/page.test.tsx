@@ -1,7 +1,13 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import Home from "./page";
+
+vi.mock("next/navigation", () => ({
+  usePathname: () => "/orders",
+  useRouter: () => ({ replace: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+}));
 
 describe("Home", () => {
   it("renders the Orders workspace without starter content", () => {
