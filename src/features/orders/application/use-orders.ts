@@ -1,6 +1,10 @@
 "use client";
 
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 
 import {
   normalizeOrderQuery,
@@ -20,6 +24,7 @@ export function useOrders(
 
   return useQuery({
     queryKey: orderQueryKeys.list(query),
+    placeholderData: keepPreviousData,
     queryFn: async () =>
       unwrapRepositoryResult(await repository.getOrders(query)),
   });

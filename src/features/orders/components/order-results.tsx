@@ -4,7 +4,7 @@ import { OrdersProvider, useOrderQueryState, useOrders } from "../application";
 import { OrderResultsView } from "./order-results-view";
 
 function OrderResultsContent() {
-  const { query } = useOrderQueryState();
+  const { query, setPage } = useOrderQueryState();
   const orders = useOrders(query);
 
   return (
@@ -12,6 +12,7 @@ function OrderResultsContent() {
       data={orders.data}
       error={orders.isError}
       loading={orders.isPending}
+      onPageChange={setPage}
       query={query}
       retry={() => void orders.refetch()}
     />

@@ -1,3 +1,5 @@
+import { Pagination } from "@/components/ui";
+
 import type { OrderQuery, PaginatedOrders } from "../domain";
 import { OrderCard } from "./order-card";
 import {
@@ -11,6 +13,7 @@ interface OrderResultsViewProps {
   readonly data?: PaginatedOrders;
   readonly error: boolean;
   readonly loading: boolean;
+  readonly onPageChange: (page: number) => void;
   readonly query: Readonly<OrderQuery>;
   readonly retry: () => void;
 }
@@ -19,6 +22,7 @@ export function OrderResultsView({
   data,
   error,
   loading,
+  onPageChange,
   query,
   retry,
 }: OrderResultsViewProps) {
@@ -28,6 +32,8 @@ export function OrderResultsView({
     const filtered = query.search !== "" || query.statuses.length > 0;
     return <OrderResultsEmpty filtered={filtered} />;
   }
+  const firstResult = (data.page - 1) * data.pageSize + 1;
+  const lastResult = firstResult + data.items.length - 1;
 
   return (
     <section aria-labelledby="order-results-title">
@@ -35,8 +41,8 @@ export function OrderResultsView({
         <h2 id="order-results-title" className="text-lg font-semibold">
           Order results
         </h2>
-        <p className="text-muted-foreground text-sm">
-          {data.totalItems} orders
+        <p className="text-muted-foreground text-sm" aria-live="polite">
+          Showing {firstResult}–{lastResult} of {data.totalItems} orders
         </p>
       </div>
       <OrderTable
@@ -48,6 +54,13 @@ export function OrderResultsView({
         {data.items.map((order) => (
           <OrderCard key={order.id} order={order} />
         ))}
+      </div>
+      <div className="mt-5 flex justify-center">
+        <Pagination
+          page={data.page}
+          totalPages={data.totalPages}
+          onPageChange={onPageChange}
+        />
       </div>
     </section>
   );

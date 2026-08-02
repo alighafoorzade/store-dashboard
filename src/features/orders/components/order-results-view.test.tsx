@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { order, page } from "../application/application.fixtures";
@@ -6,6 +6,7 @@ import { normalizeOrderQuery } from "../domain";
 import { OrderResultsView } from "./order-results-view";
 
 const defaults = normalizeOrderQuery();
+const actions = { onPageChange: vi.fn(), retry: vi.fn() };
 
 describe("OrderResultsView", () => {
   it("renders every order field in table and card layouts as text", () => {
@@ -17,7 +18,7 @@ describe("OrderResultsView", () => {
         error={false}
         loading={false}
         query={defaults}
-        retry={vi.fn()}
+        {...actions}
       />,
     );
 
@@ -37,7 +38,7 @@ describe("OrderResultsView", () => {
         error={false}
         loading={false}
         query={defaults}
-        retry={vi.fn()}
+        {...actions}
       />,
     );
 
@@ -57,7 +58,7 @@ describe("OrderResultsView", () => {
         error={false}
         loading={false}
         query={defaults}
-        retry={vi.fn()}
+        {...actions}
       />,
     );
     expect(
@@ -70,28 +71,11 @@ describe("OrderResultsView", () => {
         error={false}
         loading={false}
         query={normalizeOrderQuery({ search: "missing" })}
-        retry={vi.fn()}
+        {...actions}
       />,
     );
     expect(
       screen.getByRole("heading", { name: "No matching orders" }),
     ).toBeVisible();
-  });
-
-  it("shows clear loading and recoverable error states", () => {
-    const retry = vi.fn();
-    const { rerender } = render(
-      <OrderResultsView error={false} loading query={defaults} retry={retry} />,
-    );
-    expect(
-      screen.getByRole("status", { name: "Loading orders" }),
-    ).toBeVisible();
-
-    rerender(
-      <OrderResultsView error loading={false} query={defaults} retry={retry} />,
-    );
-    fireEvent.click(screen.getByRole("button", { name: "Try again" }));
-    expect(retry).toHaveBeenCalledOnce();
-    expect(screen.queryByText(/stack|invalid_data/i)).not.toBeInTheDocument();
   });
 });

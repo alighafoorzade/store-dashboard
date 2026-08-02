@@ -194,7 +194,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): add responsive results view`
 
-- [ ] **14. Add accessible pagination**
+- [x] **14. Add accessible pagination**
   - **Depends on:** Tasks 9–10 and 13.
   - **Work:** Add Previous/Next buttons, page numbers, current-page indication, disabled boundaries, and result totals.
   - **Acceptance criteria:**

@@ -12,6 +12,7 @@ it("has no detectable responsive results accessibility violations", async () => 
       data={page}
       error={false}
       loading={false}
+      onPageChange={vi.fn()}
       query={normalizeOrderQuery()}
       retry={vi.fn()}
     />,
