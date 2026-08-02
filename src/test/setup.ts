@@ -4,6 +4,11 @@ import { afterEach, vi } from "vitest";
 
 process.env.TZ = "UTC";
 
+Object.defineProperty(Element.prototype, "scrollIntoView", {
+  configurable: true,
+  value: vi.fn(),
+});
+
 afterEach(() => {
   cleanup();
   vi.useRealTimers();

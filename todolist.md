@@ -135,7 +135,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): add url-synchronized controls`
 
-- [ ] **10. Create shared accessible UI primitives**
+- [x] **10. Create shared accessible UI primitives**
   - **Depends on:** Tasks 2–3.
   - **Work:** Add shadcn-compatible Button, Input, Select/Dropdown, Badge, Skeleton, EmptyState, Pagination primitives, design tokens, and focus foundations.
   - **Acceptance criteria:**

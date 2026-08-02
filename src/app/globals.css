@@ -3,11 +3,41 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --surface: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
+  --border: #d4d4d8;
+  --primary: #18181b;
+  --primary-hover: #3f3f46;
+  --primary-foreground: #ffffff;
+  --danger: #b91c1c;
+  --danger-hover: #991b1b;
+  --danger-foreground: #ffffff;
+  --focus: #2563eb;
+  --status-pending: #92400e;
+  --status-processing: #1d4ed8;
+  --status-completed: #15803d;
+  --status-cancelled: #b91c1c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-focus: var(--focus);
+  --color-status-pending: var(--status-pending);
+  --color-status-processing: var(--status-processing);
+  --color-status-completed: var(--status-completed);
+  --color-status-cancelled: var(--status-cancelled);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -16,11 +46,40 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --surface: #18181b;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --border: #3f3f46;
+    --primary: #f4f4f5;
+    --primary-hover: #d4d4d8;
+    --primary-foreground: #18181b;
+    --danger: #dc2626;
+    --danger-hover: #ef4444;
+    --focus: #60a5fa;
+    --status-pending: #fbbf24;
+    --status-processing: #60a5fa;
+    --status-completed: #4ade80;
+    --status-cancelled: #f87171;
   }
+}
+
+:focus-visible {
+  outline-color: var(--focus);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
