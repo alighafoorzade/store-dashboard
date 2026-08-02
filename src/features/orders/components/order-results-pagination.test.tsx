@@ -26,7 +26,9 @@ describe("order results pagination", () => {
     expect(within(screen.getByRole("table")).getAllByRole("row")).toHaveLength(
       11,
     );
-    expect(screen.getAllByRole("article")).toHaveLength(10);
+    expect(
+      screen.getAllByRole("button", { name: /view details for order/i }),
+    ).toHaveLength(10);
     expect(screen.getByText("Showing 1–10 of 12 orders")).toBeVisible();
   });
 

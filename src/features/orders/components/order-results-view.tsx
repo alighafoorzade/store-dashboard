@@ -13,6 +13,7 @@ interface OrderResultsViewProps {
   readonly data?: PaginatedOrders;
   readonly error: boolean;
   readonly loading: boolean;
+  readonly onOpenOrder?: (id: string) => void;
   readonly onPageChange: (page: number) => void;
   readonly query: Readonly<OrderQuery>;
   readonly retry: () => void;
@@ -22,6 +23,7 @@ export function OrderResultsView({
   data,
   error,
   loading,
+  onOpenOrder = () => undefined,
   onPageChange,
   query,
   retry,
@@ -46,13 +48,14 @@ export function OrderResultsView({
         </p>
       </div>
       <OrderTable
+        onOpen={onOpenOrder}
         orders={data.items}
         sortBy={query.sortBy}
         sortDirection={query.sortDirection}
       />
       <div className="space-y-3 md:hidden">
         {data.items.map((order) => (
-          <OrderCard key={order.id} order={order} />
+          <OrderCard key={order.id} order={order} onOpen={onOpenOrder} />
         ))}
       </div>
       <div className="mt-5 flex justify-center">

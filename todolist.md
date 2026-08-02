@@ -209,7 +209,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): add client pagination`
 
-- [ ] **15. Add the order details drawer**
+- [x] **15. Add the order details drawer**
   - **Depends on:** Tasks 8, 10, and 13.
   - **Work:** Add a desktop side drawer and mobile bottom sheet containing complete order details and safe invalid-order handling.
   - **Acceptance criteria:**

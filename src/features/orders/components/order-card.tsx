@@ -1,11 +1,25 @@
 import { Badge } from "@/components/ui";
 
 import type { Order } from "../domain";
+import { activateOrderFromKeyboard } from "./order-activation";
 import { formatOrderDate, formatOrderPrice } from "./order-formatters";
 
-export function OrderCard({ order }: { readonly order: Order }) {
+interface OrderCardProps {
+  readonly onOpen: (id: string) => void;
+  readonly order: Order;
+}
+
+export function OrderCard({ onOpen, order }: OrderCardProps) {
+  const open = () => onOpen(order.id);
   return (
-    <article className="border-border bg-surface rounded-xl border p-4 shadow-sm">
+    <div
+      aria-label={`View details for order ${order.id}`}
+      className="border-border bg-surface focus-visible:outline-focus cursor-pointer rounded-xl border p-4 shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2"
+      onClick={open}
+      onKeyDown={(event) => activateOrderFromKeyboard(event, open)}
+      role="button"
+      tabIndex={0}
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="font-semibold">{order.id}</h3>
@@ -33,6 +47,6 @@ export function OrderCard({ order }: { readonly order: Order }) {
           </dd>
         </div>
       </dl>
-    </article>
+    </div>
   );
 }
