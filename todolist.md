@@ -80,7 +80,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): implement query utilities`
 
-- [ ] **6. Add validated mock order data**
+- [x] **6. Add validated mock order data**
   - **Depends on:** Tasks 4–5.
   - **Work:** Add at least 30 deterministic realistic orders and Zod schemas for individual orders and the complete dataset.
   - **Acceptance criteria:**
