@@ -223,7 +223,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - Run automated axe checks for desktop and mobile variants.
   - **Commit:** `feat(orders): add order details drawer`
 
-- [ ] **16. Add route-level failure handling**
+- [x] **16. Add route-level failure handling**
   - **Depends on:** Tasks 8, 10, and 11.
   - **Work:** Add accessible App Router loading and error boundaries with safe messaging and retry behavior.
   - **Acceptance criteria:**
