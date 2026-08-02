@@ -121,7 +121,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run typecheck`
   - **Commit:** `feat(app): configure order query providers`
 
-- [ ] **9. Implement URL query-state handling**
+- [x] **9. Implement URL query-state handling**
   - **Depends on:** Tasks 5 and 8.
   - **Work:** Validate and synchronize `q`, `status`, `sort`, `direction`, and `page`, including debounced search and page resets.
   - **Acceptance criteria:**
