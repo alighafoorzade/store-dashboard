@@ -40,7 +40,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run lint`
   - **Commit:** `build(quality): configure eslint and prettier`
 
-- [ ] **3. Configure unit and component testing**
+- [x] **3. Configure unit and component testing**
   - **Depends on:** Tasks 1–2.
   - **Work:** Configure Vitest, jsdom, React Testing Library, jest-dom, deterministic global setup, coverage reporting, and a smoke test.
   - **Acceptance criteria:**
