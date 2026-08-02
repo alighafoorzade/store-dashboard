@@ -53,7 +53,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:coverage`
   - **Commit:** `test(setup): configure vitest and testing library`
 
-- [ ] **4. Define the order domain contract**
+- [x] **4. Define the order domain contract**
   - **Depends on:** Task 3.
   - **Work:** Define immutable order, status, query, sorting, pagination, repository, and safe domain-error types without UI dependencies.
   - **Acceptance criteria:**
