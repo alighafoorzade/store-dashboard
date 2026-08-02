@@ -289,7 +289,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run build`
   - **Commit:** `feat(security): add secure response headers`
 
-- [ ] **21. Configure GitHub quality CI**
+- [x] **21. Configure GitHub quality CI**
   - **Depends on:** Tasks 17–19 and finalized npm scripts.
   - **Work:** Add GitHub Actions workflows for install, formatting, linting, type checking, unit/component coverage, architecture checks, production build, and Playwright.
   - **Acceptance criteria:**
