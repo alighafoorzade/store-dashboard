@@ -1,0 +1,381 @@
+# Internal Order Management Panel — Implementation Checklist
+
+This checklist breaks the implementation into focused tasks that should each fit in one implementation pass and one Git commit. A task may be checked only after all acceptance criteria are satisfied and every applicable verification command passes.
+
+## Execution rules
+
+- One task equals one focused commit; do not mix unrelated changes.
+- Complete tasks 1–9 in order because they establish shared foundations.
+- After task 10, layout, order UI, automation, security, and documentation work may run in parallel when their stated dependencies are available.
+- Parallel agents must not edit the same files concurrently.
+- Automation and documentation work must use the finalized npm scripts and public interfaces.
+- Do not check a task when a required test or quality gate is failing.
+- Add a regression test in the same commit as every later defect fix.
+- Never suppress type, lint, accessibility, security, or test failures merely to pass a gate.
+
+## Tasks
+
+- [x] **1. Add project tooling foundation**
+  - **Depends on:** None.
+  - **Work:** Add required runtime and test dependencies and normalized npm scripts for formatting, linting, type checking, unit/component tests, coverage, E2E tests, architecture checks, security checks, validation, and production builds.
+  - **Acceptance criteria:**
+    - A clean locked installation succeeds.
+    - All required script entry points exist in `package.json`.
+    - The existing Next.js 16 application still type-checks and builds.
+  - **Verify:**
+    - `npm ci`
+    - `npm run typecheck`
+    - `npm run build`
+  - **Commit:** `build(tooling): add application and test dependencies`
+
+- [ ] **2. Configure formatting and static linting**
+  - **Depends on:** Task 1.
+  - **Work:** Add EditorConfig, ESLint, Prettier, their ignore files, and remove the conflicting Biome configuration and scripts.
+  - **Acceptance criteria:**
+    - Source, test, and configuration files pass formatting checks.
+    - ESLint reports no errors and no rule is disabled merely to hide a defect.
+    - Formatting uses UTF-8, LF endings, final newlines, and trimmed trailing whitespace.
+  - **Verify:**
+    - `npm run format:check`
+    - `npm run lint`
+  - **Commit:** `build(quality): configure eslint and prettier`
+
+- [ ] **3. Configure unit and component testing**
+  - **Depends on:** Tasks 1–2.
+  - **Work:** Configure Vitest, jsdom, React Testing Library, jest-dom, deterministic global setup, coverage reporting, and a smoke test.
+  - **Acceptance criteria:**
+    - Tests run non-interactively in CI mode.
+    - DOM matchers and cleanup work through shared setup.
+    - Coverage output and enforceable thresholds are configured.
+    - The smoke test passes independently.
+  - **Verify:**
+    - `npm run test:unit -- --run`
+    - `npm run test:coverage`
+  - **Commit:** `test(setup): configure vitest and testing library`
+
+- [ ] **4. Define the order domain contract**
+  - **Depends on:** Task 3.
+  - **Work:** Define immutable order, status, query, sorting, pagination, repository, and safe domain-error types without UI dependencies.
+  - **Acceptance criteria:**
+    - The model supports only `Pending`, `Processing`, `Completed`, and `Cancelled` statuses.
+    - Query types support only the documented sortable fields and directions.
+    - Repository results and errors are explicit and strictly typed.
+    - Domain modules do not import React, Next.js, JSON, or UI modules.
+  - **Verify:**
+    - Run focused type-level/unit tests.
+    - `npm run typecheck`
+  - **Commit:** `feat(orders): define domain contracts`
+
+- [ ] **5. Implement and test query utilities**
+  - **Depends on:** Task 4.
+  - **Work:** Implement pure query normalization, case-insensitive search, multi-status filtering, stable sorting, and pagination.
+  - **Acceptance criteria:**
+    - Search matches order ID and customer name regardless of case and surrounding whitespace.
+    - Filters, sorting, and pagination compose deterministically.
+    - Every sortable field works in ascending and descending order.
+    - Empty collections and invalid/out-of-range pages return safe results.
+    - Sorting does not mutate the source data.
+  - **Verify:**
+    - Run focused query utility tests.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): implement query utilities`
+
+- [ ] **6. Add validated mock order data**
+  - **Depends on:** Tasks 4–5.
+  - **Work:** Add at least 30 deterministic realistic orders and Zod schemas for individual orders and the complete dataset.
+  - **Acceptance criteria:**
+    - IDs are unique.
+    - Dates are valid ISO date strings.
+    - Prices are nonnegative and item counts are positive integers.
+    - Every supported status appears in the dataset.
+    - Dataset validation rejects malformed records.
+  - **Verify:**
+    - Run schema and data-integrity tests.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): add validated mock dataset`
+
+- [ ] **7. Implement the mock repository**
+  - **Depends on:** Tasks 5–6.
+  - **Work:** Implement deterministic asynchronous `getOrders(query)` and `getOrder(id)` operations behind `OrderRepository`.
+  - **Acceptance criteria:**
+    - UI-facing modules never import the JSON dataset directly.
+    - Data is validated at the repository trust boundary before use.
+    - Malformed data and missing order IDs produce safe domain errors without leaking validation internals.
+    - The repository contract can be implemented later by a REST adapter without changing consumers.
+    - Simulated latency is deterministic and tests do not rely on real waiting.
+  - **Verify:**
+    - Run repository contract, error, and timing tests.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): implement mock repository`
+
+- [ ] **8. Configure application providers**
+  - **Depends on:** Task 7.
+  - **Work:** Add the narrowly scoped TanStack Query provider, centralized order query keys, repository injection, and typed order hooks.
+  - **Acceptance criteria:**
+    - Tests can inject a repository without global mutable state.
+    - Query keys contain normalized query state.
+    - Static layout remains outside unnecessary client-component boundaries.
+    - Loading, success, not-found, and unexpected-error results are typed.
+  - **Verify:**
+    - Run provider and hook tests.
+    - `npm run typecheck`
+  - **Commit:** `feat(app): configure order query providers`
+
+- [ ] **9. Implement URL query-state handling**
+  - **Depends on:** Tasks 5 and 8.
+  - **Work:** Validate and synchronize `q`, `status`, `sort`, `direction`, and `page`, including debounced search and page resets.
+  - **Acceptance criteria:**
+    - Invalid URL values normalize to documented safe defaults.
+    - Refreshing or bookmarking preserves valid list state.
+    - Search is debounced; filters and sorting update immediately.
+    - Changing search, filters, or sorting resets the page to 1.
+    - URL updates preserve unrelated supported parameters and avoid navigation loops.
+  - **Verify:**
+    - Run query-state hook/component tests with controlled timers and router mocks.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): add url-synchronized controls`
+
+- [ ] **10. Create shared accessible UI primitives**
+  - **Depends on:** Tasks 2–3.
+  - **Work:** Add shadcn-compatible Button, Input, Select/Dropdown, Badge, Skeleton, EmptyState, Pagination primitives, design tokens, and focus foundations.
+  - **Acceptance criteria:**
+    - Interactive controls expose accessible names, roles, and states.
+    - Touch targets are at least 44×44 CSS pixels where applicable.
+    - Focus indicators are clearly visible.
+    - Status and feedback never rely on color alone.
+    - Motion respects `prefers-reduced-motion`.
+  - **Verify:**
+    - Run primitive component tests.
+    - Run automated axe checks.
+    - `npm run lint`
+  - **Commit:** `feat(ui): add accessible shared primitives`
+
+- [ ] **11. Build the dashboard shell**
+  - **Depends on:** Task 10.
+  - **Work:** Replace starter content with application metadata, Orders navigation, a responsive admin layout, and enterprise design tokens.
+  - **Acceptance criteria:**
+    - Users can identify the current Orders area at desktop and mobile widths.
+    - Starter Next.js branding and links are removed.
+    - The shell has no horizontal page overflow at supported viewport sizes.
+    - Heading and landmark hierarchy is semantic.
+  - **Verify:**
+    - Run layout component and axe tests.
+    - Run a responsive Playwright smoke test.
+    - `npm run build`
+  - **Commit:** `feat(layout): add responsive admin shell`
+
+- [ ] **12. Build order search, filtering, and sorting controls**
+  - **Depends on:** Tasks 9–11.
+  - **Work:** Compose accessible URL-backed search, multi-status filters, sorting controls, active-filter feedback, clear action, and loading feedback.
+  - **Acceptance criteria:**
+    - Search, filters, and sorting work together.
+    - Every control is labelled and fully keyboard operable.
+    - Current selections are communicated through text/state, not color alone.
+    - Debounced search and immediate controls behave as specified.
+    - Clearing controls restores documented defaults.
+  - **Verify:**
+    - Run interaction tests with fake timers.
+    - Run automated axe checks.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): add list controls`
+
+- [ ] **13. Build responsive order results**
+  - **Depends on:** Tasks 8 and 10–12.
+  - **Work:** Add a semantic desktop/tablet table and mobile cards with loading, empty-dataset, no-results, and recoverable error states.
+  - **Acceptance criteria:**
+    - Every required order field is visible in usable form.
+    - Sort state is announced on sortable columns.
+    - Mobile rendering requires no horizontal table scrolling.
+    - Untrusted values render as text without unsafe HTML APIs.
+    - Loading, empty, no-result, and error states use clear actionable language.
+  - **Verify:**
+    - Run table, card, and state component tests.
+    - Run responsive axe checks.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): add responsive results view`
+
+- [ ] **14. Add accessible pagination**
+  - **Depends on:** Tasks 9–10 and 13.
+  - **Work:** Add Previous/Next buttons, page numbers, current-page indication, disabled boundaries, and result totals.
+  - **Acceptance criteria:**
+    - A full page renders exactly 10 records.
+    - First/last-page boundaries and filtered totals are correct.
+    - Current page is exposed visually and to assistive technology.
+    - Page changes update the URL and retain search/filter/sort state.
+    - Focus behavior remains predictable after navigation.
+  - **Verify:**
+    - Run pagination unit and integration tests.
+    - Run automated axe checks.
+    - `npm run test:unit -- --run`
+  - **Commit:** `feat(orders): add client pagination`
+
+- [ ] **15. Add the order details drawer**
+  - **Depends on:** Tasks 8, 10, and 13.
+  - **Work:** Add a desktop side drawer and mobile bottom sheet containing complete order details and safe invalid-order handling.
+  - **Acceptance criteria:**
+    - Rows/cards open details with pointer, Enter, and Space interactions.
+    - Focus moves into the drawer, remains trapped, and returns to the opener after close.
+    - Escape and an accessible close button dismiss the drawer.
+    - Accessible title and description relationships are present.
+    - A missing order produces a safe, user-friendly state.
+  - **Verify:**
+    - Run drawer interaction, focus-management, and missing-order tests.
+    - Run automated axe checks for desktop and mobile variants.
+  - **Commit:** `feat(orders): add order details drawer`
+
+- [ ] **16. Add route-level failure handling**
+  - **Depends on:** Tasks 8, 10, and 11.
+  - **Work:** Add accessible App Router loading and error boundaries with safe messaging and retry behavior.
+  - **Acceptance criteria:**
+    - Unexpected failures do not expose stack traces, schema internals, or sensitive metadata.
+    - Users receive a clear error explanation and retry action.
+    - Loading UI does not cause severe layout shift.
+    - Error recovery works without a full browser restart.
+  - **Verify:**
+    - Run error-boundary and recovery tests.
+    - `npm run build`
+  - **Commit:** `feat(app): add loading and error boundaries`
+
+- [ ] **17. Configure Playwright E2E coverage**
+  - **Depends on:** Tasks 11–16.
+  - **Work:** Configure production-server Playwright execution for Chromium, Firefox, WebKit, and a mobile viewport.
+  - **Acceptance criteria:**
+    - E2E tests cover initial viewing, ID/customer search, status filtering, both sort directions, pagination, URL restoration, drawer interactions, invalid URL recovery, and mobile usability.
+    - Tests use deterministic data and isolated browser state.
+    - Failed runs retain useful traces/screenshots without committing generated artifacts.
+  - **Verify:**
+    - `npm run build`
+    - `npm run test:e2e`
+  - **Commit:** `test(e2e): cover order management workflows`
+
+- [ ] **18. Configure Git commit quality gates**
+  - **Depends on:** Tasks 1–3 and finalized npm script names.
+  - **Work:** Configure Husky pre-commit, commit-msg, and pre-push hooks with lint-staged and CommitLint.
+  - **Acceptance criteria:**
+    - Staged supported files are formatted and linted.
+    - Invalid Conventional Commit messages fail.
+    - Pre-push runs type checking, tests, and production build.
+    - Hooks do not recursively invoke Git or themselves.
+  - **Verify:**
+    - Run isolated lint-staged and CommitLint smoke commands.
+    - Run each command referenced by pre-push.
+  - **Commit:** `build(git): configure repository quality hooks`
+
+- [ ] **19. Configure architecture and dead-code checks**
+  - **Depends on:** Stable structure from Tasks 4–16.
+  - **Work:** Configure Knip, Madge, and dependency-cruiser for feature, shared UI, domain, and infrastructure boundaries.
+  - **Acceptance criteria:**
+    - Unused files, exports, and dependencies fail checks.
+    - Circular imports fail checks.
+    - UI-to-JSON access, shared-to-feature imports, and other documented cross-layer violations fail checks.
+    - Test and configuration entry points are recognized rather than falsely reported as unused.
+  - **Verify:**
+    - `npm run check:dead-code`
+    - `npm run check:cycles`
+    - `npm run check:architecture`
+  - **Commit:** `build(architecture): enforce dependency boundaries`
+
+- [ ] **20. Add application security controls**
+  - **Depends on:** Stable app behavior from Tasks 11–16.
+  - **Work:** Configure CSP, production HSTS, frame denial, MIME protection, referrer policy, and permissions policy in Next.js.
+  - **Acceptance criteria:**
+    - Production responses contain all intended security headers.
+    - CSP permits required Next.js application behavior without undocumented broad sources.
+    - Framing, MIME sniffing, and unnecessary browser capabilities are restricted.
+    - Development behavior remains usable without weakening production policy globally.
+  - **Verify:**
+    - Run security-header integration tests.
+    - Build and inspect production-server response headers.
+    - `npm run build`
+  - **Commit:** `feat(security): add secure response headers`
+
+- [ ] **21. Configure GitHub quality CI**
+  - **Depends on:** Tasks 17–19 and finalized npm scripts.
+  - **Work:** Add GitHub Actions workflows for install, formatting, linting, type checking, unit/component coverage, architecture checks, production build, and Playwright.
+  - **Acceptance criteria:**
+    - Workflows use the lockfile and least-required permissions.
+    - Dependency caching and concurrency cancellation are configured safely.
+    - Failed E2E runs upload useful artifacts.
+    - No credentials or repository-specific secrets are embedded.
+    - Every CI command passes locally.
+  - **Verify:**
+    - Validate workflow syntax with an appropriate action linter/parser.
+    - Run every npm script referenced by the workflows.
+  - **Commit:** `ci(quality): add github quality gates`
+
+- [ ] **22. Configure supply-chain and security CI**
+  - **Depends on:** Tasks 20–21.
+  - **Work:** Add Dependabot, npm audit/SCA, Gitleaks, Semgrep, CodeQL, and an OWASP ZAP baseline workflow.
+  - **Acceptance criteria:**
+    - High/critical findings fail the applicable gate according to documented policy.
+    - Actions/scanners are pinned and use least-required permissions.
+    - ZAP scans a locally started production build.
+    - Scan output is retained without exposing secrets.
+  - **Verify:**
+    - Validate workflow and scanner configuration syntax.
+    - Run local scanner commands where the tools support local execution.
+    - `npm run security:audit`
+  - **Commit:** `ci(security): add automated security scanning`
+
+- [ ] **23. Add Sonar configuration**
+  - **Depends on:** Tasks 3 and 19.
+  - **Work:** Add Sonar scanner properties and an npm script without enabling CI execution or inventing credentials.
+  - **Acceptance criteria:**
+    - Source, test, exclusion, and coverage paths match the repository.
+    - No organization key, project secret, token, or server credential is fabricated.
+    - Documentation states how authorized maintainers enable analysis later.
+  - **Verify:**
+    - Inspect configuration paths against the repository.
+    - Run a scanner dry run only when an authorized server is available.
+  - **Commit:** `build(quality): add sonar configuration`
+
+- [ ] **24. Document architecture and operation**
+  - **Depends on:** Finalized architecture and scripts from Tasks 1–23.
+  - **Work:** Rewrite `README.md` and add a maximum-one-page `DECISIONS.md`.
+  - **Acceptance criteria:**
+    - Documentation covers installation, development, build, tests, quality/security commands, architecture, and assumptions.
+    - It explains replacing the mock repository with REST.
+    - It covers future authentication, authorization, server-side filtering/sorting/pagination, observability, caching, indexing, virtualization, and the 100,000-order strategy.
+    - Next.js substitutions for the prompt's Vite/React Router requirements are explicit.
+  - **Verify:**
+    - Execute the documented install, check, test, and build commands.
+    - Run Markdown formatting and link checks.
+  - **Commit:** `docs(project): document architecture and workflows`
+
+- [ ] **25. Document threat model and residual risks**
+  - **Depends on:** Tasks 20 and 22.
+  - **Work:** Add a lightweight STRIDE assessment for mock JSON, URL parameters, browser rendering, CI dependencies, and future REST/authentication boundaries.
+  - **Acceptance criteria:**
+    - Assets, actors, trust boundaries, threats, mitigations, privacy constraints, and residual risks are explicit.
+    - Synthetic customer data and the absence of current authentication/authorization are documented.
+    - Future backend authorization is identified as server-enforced rather than a client-only concern.
+    - The review maps back to `docs/security.md`.
+  - **Verify:**
+    - Complete the security review checklist from `docs/security.md`.
+    - Run Markdown formatting and link checks.
+  - **Commit:** `docs(security): add threat model`
+
+- [ ] **26. Run final production audit**
+  - **Depends on:** Tasks 1–25.
+  - **Work:** Run the complete production-readiness suite, fix only integration defects found by it, record results, and check completed tasks in this file.
+  - **Acceptance criteria:**
+    - Formatting, linting, strict type checking, unit/component tests, coverage, architecture checks, security checks, E2E tests, and production build pass.
+    - No known critical accessibility or security defects remain.
+    - Documentation matches the shipped commands and behavior.
+    - Any discovered defect has a regression test in the corrective commit.
+  - **Verify:**
+    - `npm run validate`
+    - `npm run test:e2e`
+    - Run the documented local security checks.
+    - Review the final production build and test reports.
+  - **Commit:** `chore(release): complete production readiness audit`
+
+## Parallel execution map
+
+- **Foundation lane:** Tasks 1–10; keep ordered where dependencies are stated.
+- **Application UI lane:** Tasks 11–16 after Task 10; coordinate shared order-page files carefully.
+- **E2E lane:** Task 17 after the complete user workflow is stable.
+- **Developer tooling lane:** Task 18 can proceed once scripts stabilize; Task 19 waits for the final module structure.
+- **Security lane:** Task 20 can proceed after application behavior stabilizes; Tasks 21–23 follow finalized scripts/configuration.
+- **Documentation lane:** Tasks 24–25 may be drafted in parallel but must be reconciled with the final architecture and commands.
+- **Release lane:** Task 26 runs only after every preceding task is complete.
