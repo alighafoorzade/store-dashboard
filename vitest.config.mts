@@ -7,6 +7,7 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    exclude: ["tests/e2e/**", "node_modules/**"],
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
     clearMocks: true,

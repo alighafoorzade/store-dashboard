@@ -150,7 +150,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run lint`
   - **Commit:** `feat(ui): add accessible shared primitives`
 
-- [ ] **11. Build the dashboard shell**
+- [x] **11. Build the dashboard shell**
   - **Depends on:** Task 10.
   - **Work:** Replace starter content with application metadata, Orders navigation, a responsive admin layout, and enterprise design tokens.
   - **Acceptance criteria:**
