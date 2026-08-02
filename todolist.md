@@ -108,7 +108,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): implement mock repository`
 
-- [ ] **8. Configure application providers**
+- [x] **8. Configure application providers**
   - **Depends on:** Task 7.
   - **Work:** Add the narrowly scoped TanStack Query provider, centralized order query keys, repository injection, and typed order hooks.
   - **Acceptance criteria:**
