@@ -275,7 +275,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run check:architecture`
   - **Commit:** `build(architecture): enforce dependency boundaries`
 
-- [ ] **20. Add application security controls**
+- [x] **20. Add application security controls**
   - **Depends on:** Stable app behavior from Tasks 11–16.
   - **Work:** Configure CSP, production HSTS, frame denial, MIME protection, referrer policy, and permissions policy in Next.js.
   - **Acceptance criteria:**

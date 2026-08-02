@@ -1,7 +1,17 @@
 import type { NextConfig } from "next";
 
+import { createSecurityHeaders } from "./security-headers";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: createSecurityHeaders(process.env.NODE_ENV === "development"),
+      },
+    ];
+  },
+  poweredByHeader: false,
   reactCompiler: true,
 };
 
