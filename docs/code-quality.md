@@ -4,6 +4,10 @@
 
 The project must enforce code quality automatically before code reaches the repository.
 
+## File Size
+
+Every source and test file must remain at or below 100 lines of code. When a file exceeds 100 lines, refactor it by responsibility into cohesive modules before merging. Do not evade this rule by compressing formatting, combining statements, or moving complexity into generated code.
+
 Whenever setting up a new project, configure the following tools unless explicitly instructed otherwise.
 
 ## Husky

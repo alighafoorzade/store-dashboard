@@ -66,7 +66,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run typecheck`
   - **Commit:** `feat(orders): define domain contracts`
 
-- [ ] **5. Implement and test query utilities**
+- [x] **5. Implement and test query utilities**
   - **Depends on:** Task 4.
   - **Work:** Implement pure query normalization, case-insensitive search, multi-status filtering, stable sorting, and pagination.
   - **Acceptance criteria:**
