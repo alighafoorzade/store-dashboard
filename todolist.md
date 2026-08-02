@@ -28,7 +28,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run build`
   - **Commit:** `build(tooling): add application and test dependencies`
 
-- [ ] **2. Configure formatting and static linting**
+- [x] **2. Configure formatting and static linting**
   - **Depends on:** Task 1.
   - **Work:** Add EditorConfig, ESLint, Prettier, their ignore files, and remove the conflicting Biome configuration and scripts.
   - **Acceptance criteria:**
