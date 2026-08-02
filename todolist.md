@@ -329,7 +329,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - Run a scanner dry run only when an authorized server is available.
   - **Commit:** `build(quality): add sonar configuration`
 
-- [ ] **24. Document architecture and operation**
+- [x] **24. Document architecture and operation**
   - **Depends on:** Finalized architecture and scripts from Tasks 1–23.
   - **Work:** Rewrite `README.md` and add a maximum-one-page `DECISIONS.md`.
   - **Acceptance criteria:**
