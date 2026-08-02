@@ -303,7 +303,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - Run every npm script referenced by the workflows.
   - **Commit:** `ci(quality): add github quality gates`
 
-- [ ] **22. Configure supply-chain and security CI**
+- [x] **22. Configure supply-chain and security CI**
   - **Depends on:** Tasks 20–21.
   - **Work:** Add Dependabot, npm audit/SCA, Gitleaks, Semgrep, CodeQL, and an OWASP ZAP baseline workflow.
   - **Acceptance criteria:**
