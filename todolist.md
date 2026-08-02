@@ -261,7 +261,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - Run each command referenced by pre-push.
   - **Commit:** `build(git): configure repository quality hooks`
 
-- [ ] **19. Configure architecture and dead-code checks**
+- [x] **19. Configure architecture and dead-code checks**
   - **Depends on:** Stable structure from Tasks 4–16.
   - **Work:** Configure Knip, Madge, and dependency-cruiser for feature, shared UI, domain, and infrastructure boundaries.
   - **Acceptance criteria:**
