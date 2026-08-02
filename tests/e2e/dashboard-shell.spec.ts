@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { expectNoHorizontalOverflow } from "./orders-test-helpers";
+
 test("renders a usable responsive Orders shell", async ({ page }) => {
   await page.goto("/");
 
@@ -11,12 +13,7 @@ test("renders a usable responsive Orders shell", async ({ page }) => {
     "Orders",
   );
 
-  const hasHorizontalOverflow = await page.evaluate(
-    () =>
-      document.documentElement.scrollWidth >
-      document.documentElement.clientWidth,
-  );
-  expect(hasHorizontalOverflow).toBe(false);
+  await expectNoHorizontalOverflow(page);
 
   await page.keyboard.press("Tab");
   await expect(

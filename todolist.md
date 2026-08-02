@@ -236,7 +236,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run build`
   - **Commit:** `feat(app): add loading and error boundaries`
 
-- [ ] **17. Configure Playwright E2E coverage**
+- [x] **17. Configure Playwright E2E coverage**
   - **Depends on:** Tasks 11–16.
   - **Work:** Configure production-server Playwright execution for Chromium, Firefox, WebKit, and a mobile viewport.
   - **Acceptance criteria:**
