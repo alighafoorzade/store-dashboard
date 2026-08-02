@@ -94,7 +94,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:unit -- --run`
   - **Commit:** `feat(orders): add validated mock dataset`
 
-- [ ] **7. Implement the mock repository**
+- [x] **7. Implement the mock repository**
   - **Depends on:** Tasks 5–6.
   - **Work:** Implement deterministic asynchronous `getOrders(query)` and `getOrder(id)` operations behind `OrderRepository`.
   - **Acceptance criteria:**
