@@ -248,7 +248,7 @@ This checklist breaks the implementation into focused tasks that should each fit
     - `npm run test:e2e`
   - **Commit:** `test(e2e): cover order management workflows`
 
-- [ ] **18. Configure Git commit quality gates**
+- [x] **18. Configure Git commit quality gates**
   - **Depends on:** Tasks 1–3 and finalized npm script names.
   - **Work:** Configure Husky pre-commit, commit-msg, and pre-push hooks with lint-staged and CommitLint.
   - **Acceptance criteria:**
